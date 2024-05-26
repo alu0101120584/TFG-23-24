@@ -1,7 +1,7 @@
 import flet as ft
 
 def IndexView(page, myPyrebase=None):
-    title = "Flet + Pyrebase"
+    title = "App TFG Parlamento"
 
     def handle_sign_in_error():
         page.snack_bar = ft.SnackBar(

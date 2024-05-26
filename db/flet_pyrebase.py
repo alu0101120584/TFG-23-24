@@ -71,23 +71,6 @@ class PyrebaseWrapper:
         return self.db.child("users").child(self.uuid).child("username").get(token=self.idToken).val()
 
     ### CRUD ###
-    def add_note(self, data):
-        if self.uuid == None:
-            self.uuid = self.auth.get_account_info(self.idToken)["users"][0]["localId"]
-        self.db.child("users").child(self.uuid).child("notes").push(data, self.idToken)
-
-    def get_notes(self):
-        return self.db.child("users").child(self.uuid).get(token=self.idToken).val()
-
-    def stream_data(self, stream_handler):
-        stream = self.db.child("users").child(self.uuid).child("notes").stream(stream_handler=stream_handler, token=self.idToken)
-        self.streams.append(stream)
-
-    def edit_note(self, note_uuid, data):
-        self.db.child("users").child(self.uuid).child("notes").child(note_uuid).update(data, token=self.idToken)
-
-    def delete_note(self, note_uuid):
-        self.db.child("users").child(self.uuid).child("notes").child(note_uuid).remove(token=self.idToken)
 
     ### not killing the streams causes read multiplication
     def kill_all_streams(self):

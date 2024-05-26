@@ -8,7 +8,7 @@ mycred = credentials.Certificate("./db/servicio.json")
 initialize_app(mycred,{'storageBucket':'tfg-parlamento.appspot.com'})
 
 def AdminView(page, myPyrebase):
-    title = "Admin View"
+    title = "App TFG Parlamento"
     you_selected = ft.Column()
     
     with open('./assets/propuestas.json', 'r') as archivo:
@@ -195,5 +195,5 @@ def AdminView(page, myPyrebase):
 
     return {
         "view":myPage,
-        "title": "AdminView",
+        "title": title,
         }

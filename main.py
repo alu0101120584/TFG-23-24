@@ -1,6 +1,6 @@
 
 import flet as ft
-from views.FletRouter import Router
+from components.flet_router import Router
 from db.flet_pyrebase import PyrebaseWrapper
 
 def main(page: ft.Page):

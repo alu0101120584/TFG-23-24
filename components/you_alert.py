@@ -16,7 +16,6 @@ class YouAlert(ft.UserControl):
                 )
             )
  
- 
     def OpenYouAlert(self):
         res = ft.AlertDialog(
             content=ft.Column([self.mytable],
