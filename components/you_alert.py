@@ -6,6 +6,7 @@ class YouAlert(ft.UserControl):
         self.mydata = mydata
         self.mytable = mytable
 
+        self.mytable.rows.clear()
         for x in self.mydata:
             self.mytable.rows.append(
                 ft.DataRow(

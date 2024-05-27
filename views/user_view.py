@@ -52,7 +52,6 @@ def UserView(page, myPyrebase):
                 )
             )
     
-    
     def descargar_archivo(nombre_archivo):
         # Nombre del archivo que deseas descargar
         blob = storage.bucket().blob(nombre_archivo)

@@ -6,27 +6,22 @@ from components.you_alert import YouAlert
 def ResultsView(page, myPyrebase):
     title = "App TFG Parlamento"
     def handle_admin(e):
+        for i in range(len(cartas)):
+            page.controls.pop()
+            page.update()
+        
+        cartas.clear()
         page.go('/adminView')
         
     def handle_logout(*e):
+        for i in range(len(cartas)):
+            page.controls.pop()
+            page.update()
+        cartas.clear()
         username.value = ""
         myPyrebase.kill_all_streams()
         myPyrebase.sign_out()
         page.go("/")
-        
-    def cargar_datos(ruta_archivo):
-        try:
-            with open(ruta_archivo, 'r') as archivo:
-                 datos = json.load(archivo)
-
-            print("Datos cargados correctamente.")
-            return datos
-        except FileNotFoundError:
-            print(f"El archivo {ruta_archivo} no fue encontrado.")
-        except json.JSONDecodeError:
-            print(f"Error al decodificar el archivo JSON {ruta_archivo}.")
-        except Exception as e:
-            print(f"Ocurrió un error inesperado: {e}")
     
     def obtener_todos_los_usuarios():
         usuarios = []
@@ -65,7 +60,7 @@ def ResultsView(page, myPyrebase):
                     print(f"No se pudo descargar el archivo '{fileName}': {e}")
             else:
                 print(f"El archivo '{fileName}' no existe en Google Cloud Storage.")
-        
+                                    
     cartas = []
     lista_usuarios = obtener_todos_los_usuarios()
     lista_usuariovotos = []
@@ -87,7 +82,6 @@ def ResultsView(page, myPyrebase):
             scroll=ft.ScrollMode.ALWAYS,
             )
     )
-    grupos_out = {}
     #Función que se encarga de agrupar las propuestas según la intención de voto
     def completar_overlay(lista_datos):
         # Creamos un diccionario para almacenar los elementos agrupados por Voto
@@ -112,13 +106,12 @@ def ResultsView(page, myPyrebase):
             print(grupos.get(usuario, {}).get('Si', None))
             print(usuario)
         
-        grupos_out = grupos 
         return grupos  
     
     def cargar_datos(ruta_archivo):
         try:
             with open(ruta_archivo, 'r') as archivo:
-                 datos = json.load(archivo)
+                datos = json.load(archivo)
 
             print("Datos cargados correctamente.")
             return datos
@@ -160,7 +153,6 @@ def ResultsView(page, myPyrebase):
     def create_carta(nombre, grupos):
         email = "@gmail.com"
         resultado = nombre.replace(email, "") 
-        #AQUI FALATA SELECCIONAR LAS VOTACIONES QUE SON SI, NO, ABSTENCION DE LISTA_USUARIOSVOTOS
         si = grupos.get(nombre, {}).get('Si', None)
         no = grupos.get(nombre, {}).get('No', None)
         abstencion = grupos.get(nombre, {}).get('Abstencion', None)
@@ -172,32 +164,32 @@ def ResultsView(page, myPyrebase):
                 content=ft.Column(
                     [
                         ft.ListTile(
-                            title=ft.Text(f"Resumen de votaciones del usuario {resultado}"),
+                            title=ft.Text(f"Resumen de votaciones del usuario {resultado}", color="white", weight="bold",size=16),
                         ),
                         ft.ListTile(
-                            title=ft.Text("Agrupación Sí"),
-                            trailing=ft.ElevatedButton("Mostrar", bgcolor="#043A68", color = "white", on_click= lambda e :open_dlg(si)),
+                            title=ft.Text("Agrupación Sí", color="white"),
+                            trailing=ft.ElevatedButton("Mostrar", bgcolor="#facf25", color = "#043A68", on_click= lambda e :open_dlg(si)),
                         ),
                         ft.ListTile(
-                            title=ft.Text("Agrupación No"),
-                            trailing=ft.ElevatedButton("Mostrar", bgcolor="#043A68", color = "white", on_click= lambda f :open_dlg(no)),
+                            title=ft.Text("Agrupación No", color="white"),
+                            trailing=ft.ElevatedButton("Mostrar", bgcolor="#facf25", color = "#043A68", on_click= lambda f :open_dlg(no)),
                         ),
                         ft.ListTile(
-                            title=ft.Text("Agrupación Abstención"),
-                            trailing=ft.ElevatedButton("Mostrar", bgcolor="#043A68", color = "white", on_click= lambda g :open_dlg(abstencion)),
+                            title=ft.Text("Agrupación Abstención", color="white"),
+                            trailing=ft.ElevatedButton("Mostrar", bgcolor="#facf25", color = "#043A68", on_click= lambda g :open_dlg(abstencion)),
                         ),
                     ],
                     spacing=0,
                 ),
                 padding=ft.padding.symmetric(vertical=10),
-            )
+            ),
+            color="#043A68",
         )
         page.update()
         return carta
     
     
     def create_overlay(grupos):
-        cartas2 = []
         for usuario in lista_usuarios:
             cartas.append(create_carta(usuario.email, grupos))
         
@@ -215,7 +207,6 @@ def ResultsView(page, myPyrebase):
         disabled = False,
         on_click = handle_admin
     )
-    
     navbar = ft.Container(
         padding = ft.padding.all(10),
         bgcolor="#043A68",
@@ -224,14 +215,13 @@ def ResultsView(page, myPyrebase):
             alignment = ft.MainAxisAlignment.SPACE_BETWEEN,
         )    
     )
-    
-    row = ft.Row(spacing = 20, controls = [cartas])
+    boton =  ft.ElevatedButton("Cargar los resultados",
+        bgcolor="#043A68", color = "white",
+        on_click = lambda e :create_overlay(completar_overlay(lista_usuariovotos)))
+     
     myPage = ft.Column(
-        [
-            navbar,
-            ft.FilledButton("Pulsar",
-                on_click = lambda e :create_overlay(completar_overlay(lista_usuariovotos))),
-        ]
+        [navbar,boton],
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER
     )
     
     return {
