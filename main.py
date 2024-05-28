@@ -1,4 +1,3 @@
-
 import flet as ft
 from components.flet_router import Router
 from db.flet_pyrebase import PyrebaseWrapper

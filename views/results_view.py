@@ -1,6 +1,7 @@
 import flet as ft
 from firebase_admin import auth,storage,credentials
 import json
+import os
 from components.you_alert import YouAlert
 
 def ResultsView(page, myPyrebase):
@@ -22,6 +23,16 @@ def ResultsView(page, myPyrebase):
         myPyrebase.kill_all_streams()
         myPyrebase.sign_out()
         page.go("/")
+    
+    def delete_file(file_path):
+        if os.path.exists(file_path):
+            try:
+                os.remove(file_path)
+                print(f"El archivo {file_path} ha sido eliminado con éxito.")
+            except Exception as e:
+                print(f"Ocurrió un error al intentar eliminar el archivo: {e}")
+        else:
+            print(f"El archivo {file_path} no existe.")
     
     def obtener_todos_los_usuarios():
         usuarios = []
@@ -98,13 +109,9 @@ def ResultsView(page, myPyrebase):
         
         #Impresión de las propuestas según la intención de voto de cada usuario
         for usuario, propuestas in grupos.items():
-            print("Usuario:", usuario)
             for voto, propuestas_voto in propuestas.items():
-                print("Agrupación:", voto)
                 for propuesta in propuestas_voto:
                     print("Propuesta:", propuesta)
-            print(grupos.get(usuario, {}).get('Si', None))
-            print(usuario)
         
         return grupos  
     
@@ -139,7 +146,7 @@ def ResultsView(page, myPyrebase):
             snackbar = ft.SnackBar(
                 content=ft.Text("No hay ninguna propuesta con este resultado"),
                 duration=2000,
-                bgcolor="#043A68"
+                bgcolor="red"
             )
             page.snack_bar = snackbar
             page.snack_bar.open = True
@@ -192,9 +199,13 @@ def ResultsView(page, myPyrebase):
     def create_overlay(grupos):
         for usuario in lista_usuarios:
             cartas.append(create_carta(usuario.email, grupos))
+            fichero = "./assets/download/" + usuario.email + "resultados.json"
+            delete_file(fichero)
         
         for carta in cartas:
             page.add(carta)
+        
+        
     
     username = ft.TextField(label="Nombre de usuario", width=300)
     banner = ft.Text("Resultados de las votaciones", weight = "bold", color = ft.colors.WHITE, size = 32)
@@ -229,3 +240,5 @@ def ResultsView(page, myPyrebase):
         "title": title,
         "load": descargar_archivos
         }
+    
+    #FALTA ELIMINAR LOS FICHEROS QUE SE DESCARGUEN

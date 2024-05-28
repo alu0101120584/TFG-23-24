@@ -14,22 +14,43 @@ def AdminView(page, myPyrebase):
     with open('./assets/propuestas.json', 'r') as archivo:
         # Carga el contenido del archivo JSON en una lista
         datos = json.load(archivo)
-        
-    def handle_sign_up(e):
-        try:
-            myPyrebase.register_user(name.value, username.value, email.value, password.value)
-            name.value, username.value, email.value, password.value = '', '', '', ''
-            page.go('/')
-        except:
-            handle_sign_in_error()
+    
+    def validate_inputs():
+        email_value = email.value
+        password_value = password.value
 
-    def handle_sign_in_error():
+        # Verificar longitud de la contraseña
+        if len(password_value) < 8:
+            show_snackbar("La contraseña debe tener al menos 8 caracteres.")
+            return False
+
+        # Verificar formato del correo electrónico
+        if "@" not in email_value or "." not in email_value:
+            show_snackbar("Por favor, introduce un correo electrónico válido.")
+            return False
+
+        return True
+
+    def show_snackbar(message):
         page.snack_bar = ft.SnackBar(
-            content=ft.Text("Completa todos los campos", color=ft.colors.WHITE),
-            bgcolor=ft.colors.RED
+            content=ft.Text(message, color=ft.colors.WHITE),
+            bgcolor=ft.colors.RED,
+            duration=2000
         )
         page.snack_bar.open = True
         page.update()
+    
+    def handle_sign_up(e):
+        if validate_inputs():
+            try:
+                myPyrebase.register_user(name.value, username.value, email.value, password.value)
+                name.value, username.value, email.value, password.value = '', '', '', ''
+                page.go('/')
+            except:
+                handle_sign_in_error()
+
+    def handle_sign_in_error():
+        show_snackbar("Error al registrar usuario. Por favor, inténtalo de nuevo.")
     
     def handle_result(e):
         page.go('/resultView')
@@ -41,6 +62,7 @@ def AdminView(page, myPyrebase):
         page.go("/")
     
     def load_table():
+        mytable.rows.clear()
         for x in datos:
             mytable.rows.append(
                 ft.DataRow(
@@ -71,6 +93,8 @@ def AdminView(page, myPyrebase):
             except Exception as e:
                 print(e)
                 print("Ha ocurrido un error en la subida del fichero")
+                
+    
     
     mytable = ft.DataTable(
 		# AND ENABLE CHECKBOX FOR SELECT multiple

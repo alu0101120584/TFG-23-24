@@ -38,7 +38,7 @@ def IndexView(page, myPyrebase=None):
 
     def handle_google_hover(e):
         pass
-
+        
     email = ft.TextField(label="Email", bgcolor = ft.colors.WHITE, width=300, height=40)
     password = ft.TextField(label="Contraseña", bgcolor = ft.colors.WHITE, width=300, height=40, password=True)
     
