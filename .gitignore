@@ -6,6 +6,11 @@ __pycache__/
 #Key firebase
 servicio.json
 
+#Downloaded files from firebase
+assets/download
+assets/upload
+assets/propuestas.json
+
 # C extensions
 *.so
 
