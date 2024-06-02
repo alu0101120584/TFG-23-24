@@ -7,8 +7,8 @@ __pycache__/
 servicio.json
 
 #Downloaded files from firebase
-assets/download
-assets/upload
+assets/download/
+assets/upload/
 assets/propuestas.json
 
 # C extensions
