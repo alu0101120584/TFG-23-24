@@ -23,21 +23,9 @@ def IndexView(page, myPyrebase=None):
         except:
             handle_sign_in_error()
             page.update()
-
-    def handle_user(e):
-        page.go("/userView")
-        
-    def handle_register(e):
-        page.go('/register')
         
     def handle_admin(e):
         page.go('/adminView')
-        
-    def handle_google(e):
-        google_button.scale = 0.9
-
-    def handle_google_hover(e):
-        pass
         
     email = ft.TextField(label="Email", bgcolor = ft.colors.WHITE, width=300, height=40)
     password = ft.TextField(label="Contraseña", bgcolor = ft.colors.WHITE, width=300, height=40, password=True)
@@ -63,10 +51,7 @@ def IndexView(page, myPyrebase=None):
         ),
         on_click=handle_admin
     )
-    register_button = ft.TextButton("Register", on_click=handle_register)
-
-    google_button = ft.Container(ft.Image(src="btn_google_dark.png", width=250), on_click=handle_google, on_hover=handle_google_hover)
-    
+   
     myPage = ft.Row(
         controls = [
             ft.Container(

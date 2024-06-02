@@ -9,9 +9,8 @@ initialize_app(mycred,{'storageBucket':'tfg-parlamento.appspot.com'})
 
 def AdminView(page, myPyrebase):
     title = "App TFG Parlamento"
-    you_selected = ft.Column()
     
-    with open('./assets/propuestas.json', 'r') as archivo:
+    with open('../assets/propuestas.json', 'r') as archivo:
         # Carga el contenido del archivo JSON en una lista
         datos = json.load(archivo)
     

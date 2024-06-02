@@ -1,15 +1,20 @@
 import flet as ft
 import json
 import os
-import firebase_admin
 from firebase_admin import auth,storage,credentials
-import pyrebase
 from db.flet_pyrebase import PyrebaseWrapper
 
 def UserView(page, myPyrebase):
+    """
+        Inicial
+    """
+    
     title = "App TFG Parlamento"
     
     def handle_logout(*e):
+        """
+        handle_logout
+        """
         username.value = ""
         myPyrebase.kill_all_streams()
         myPyrebase.sign_out()
@@ -57,7 +62,7 @@ def UserView(page, myPyrebase):
         blob = storage.bucket().blob(nombre_archivo)
 
         # Descarga el archivo a la ubicación especificada
-        blob.download_to_filename("./assets/download/propuestas.json")
+        blob.download_to_filename("../assets/download/propuestas.json")
     
     def upload(datos):
         #Obtener el email del usuario que esta logeado en la app
@@ -142,7 +147,7 @@ def UserView(page, myPyrebase):
 		rows=[], 
 		)
     
-    with open('./assets/propuestas.json', 'r') as archivo:
+    with open('../assets/propuestas.json', 'r') as archivo:
         # Carga el contenido del archivo JSON en una lista
         datos = json.load(archivo)
             

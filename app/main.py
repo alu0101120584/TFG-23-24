@@ -3,6 +3,10 @@ from components.flet_router import Router
 from db.flet_pyrebase import PyrebaseWrapper
 
 def main(page: ft.Page):
+    """
+    Suma dos números.
+    :return: int: La suma de a y b.
+    """
     
     page.window_height = 700
     page.window_width = 1000

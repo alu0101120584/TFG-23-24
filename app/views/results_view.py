@@ -62,7 +62,7 @@ def ResultsView(page, myPyrebase):
             # Descarga el archivo a la ubicación especificada
             if blob.exists():
                 try:
-                    ruta = ('./assets/download/' + fileName)
+                    ruta = ('../assets/download/' + fileName)
                     blob.download_to_filename(ruta)
                     datos_entrada = cargar_datos(ruta)
                     lista_usuariovotos.append([usuario.email, datos_entrada])
@@ -150,7 +150,7 @@ def ResultsView(page, myPyrebase):
             )
             page.snack_bar = snackbar
             page.snack_bar.open = True
-            page.update()
+            page.update() 
         else:
             load_table(datos)
             page.dialog = dlg
@@ -195,18 +195,15 @@ def ResultsView(page, myPyrebase):
         page.update()
         return carta
     
-    
     def create_overlay(grupos):
         for usuario in lista_usuarios:
             cartas.append(create_carta(usuario.email, grupos))
-            fichero = "./assets/download/" + usuario.email + "resultados.json"
+            fichero = "../assets/download/" + usuario.email + "resultados.json"
             delete_file(fichero)
         
         for carta in cartas:
             page.add(carta)
         
-        
-    
     username = ft.TextField(label="Nombre de usuario", width=300)
     banner = ft.Text("Resultados de las votaciones", weight = "bold", color = ft.colors.WHITE, size = 32)
     home_button = ft.TextButton("", icon=ft.icons.HOME_ROUNDED, icon_color=ft.colors.WHITE, on_click=lambda _:page.go('/'))
@@ -240,5 +237,3 @@ def ResultsView(page, myPyrebase):
         "title": title,
         "load": descargar_archivos
         }
-    
-    #FALTA ELIMINAR LOS FICHEROS QUE SE DESCARGUEN
