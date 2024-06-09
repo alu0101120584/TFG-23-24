@@ -14,5 +14,7 @@ Para la instalación de esta aplicación seguir los siguientes pasos:
   - `pip install -r requirements.txt`
 
 Una vez se haya instalado y se haya creado el entrono virtual simplemente introducir el siguiente comando para lanzar la aplicación
-
-`flet app/main.py`
+   
+   cd app
+   
+   flet main.py
