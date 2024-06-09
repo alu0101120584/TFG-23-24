@@ -5,3 +5,9 @@ Este repositorio contiene el código generado para realizar el Trabajo de Fin de
 ## Instalación
 
 Para la instalación de esta aplicación seguir los siguientes pasos:
+
+python -m venv .venv
+
+pip install -r requirements.txt
+
+flet app/main.py

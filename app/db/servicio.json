@@ -1,0 +1,14 @@
+{
+    "type": "service_account",
+    "project_id": "tfg-parlamento",
+    "private_key_id": "529e5f9f8d4f9052d9b190046521b191cf683584",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDf0RfvmHflukmn\ntvamjoGb4Homonk8JqF65PT7Y2uOQBRgLQHj9aD1AZQQj6bjkMaUSsN8J8g2aSuv\nG/vj06JkyBBkozqyq98HeSDY2vpJ8n7Z0aPUVH9VY4+0GmSqOPMSjHPmMD+wcW+9\nFg7RJP+CCnVMzF3CY9dd+fKY2MN4jlMY8ULioWBYIcrXLGNMupZjUqWj4ZK2QO2/\nFhGTHh9cAtoicgwNN8vOnuctjm0ueHBs2UUw+BFpPacffAErGO2Z6eGo53644Rk2\nSutHapZkY9XjI9CyVLPCd73wwvrbWy8RCZY9S+5Fe6JSLi2982yoVShGO1BmhfAU\novIPuqDbAgMBAAECgf9y93TUHf14g7hR7inEZG8vIp+cONkNjMpl1jYA65DUARZ2\nUKgn8IQ9VhI4b5HKUxOuGLlRjR3K1TsbN8SrwoooOpwxFaeRH7fwnsfAnLr0QRvn\nx0fgSYce1YV7fhM3XQl+/aaLFz2f5KUA+9OgmuCka7rVOCTxNVfrbfiviqjdw0f+\n/1yERXhiaMYxfhCznjyKdTjH+flwRf7mPSOoRgh59aiXV+uUh+JnFa1RebFLf8WO\nOz6Nk3oTcYFPacaeabU0R4CxRltElPNpZfphq3KzR8uAiiZZkIozV8HfWWVB/FXU\n8YPknShWmEdMl0XHH/0nVpYyxBZcsxaezyeL66kCgYEA8c0jYoSWLWBMH0XTG9Bj\n98mPcZSKmMY7bNQpt2/hkvJ4ABOHv0V+XQ46ZhGK14LKH4LHzKps+RCC5ltRm2Wm\n8epcxf6mFiU78TLU9Jgl2XKP8thDzSLgOuVhHl1SXey0JvPdGqVLpi8vH+oaSkrb\neZttmiSFJ6qsISWvUIoSS1MCgYEA7PWakIWxrFZ8yJHNlPqFdmHmtQ36+xON58KO\n1Px4hw8IJ9SCICc2GD/3VIXQ8pbd4deRX6Me/cTuLz0GNvyPha2hJXQt2G7GzIcp\nR+dv5hRst6nb0xs0cYih5jbC1DT3pDXwbkjn2TbnDNVZ1Rq3EK7SpWv5vWmHKsg3\nO5j6q1kCgYAB7BiQ6u7qs25HfV2dRf3VdXO/emfTqRfF2LXwMGKBsY3EqmMU4S+M\n+9T5BMCuz+pdb8O42837+OahgC5Y5uj52VwdctXNLUSZuUa6Hw+F+AQu8Qsw8UsJ\nDNPF0wYZmw0flia21IOScaOVRF4rIwc1o0euxwWL+C5gIRWQtVhJ4wKBgQCgUmf6\nQkp89KNGvMdgdcOY3hJPC591ArzvQoaK+iq+DmCROkm0YXNLIvQ/Xq6Jg6Op6sTz\n9RTB09znXx12VJjydBBkm99s4T5mIUi/2omuHMGV3jnZ8j0gV7ZaYVCebRvkIY6D\nv5YGNAxNdYhrE8Eqa24f+BcnnV+ThZVBIHbxOQKBgQDg4mU73r+uUog4BS1jxBmv\nNvLfnP/jMMKzmim7mo6OPOuv2jw7G9xXlEDdeDGHz21mJtAH3MZmcCqFivVc4o/l\ncjndqi2Us++tUdnracG/6WJhsQVW0v/tdqkEH5YN4TB0R7WCgPlJoyLXxJGJ7jW0\n0YXFV94JhTU0nAKy7eBLpg==\n-----END PRIVATE KEY-----\n",
+    "client_email": "firebase-adminsdk-dz18l@tfg-parlamento.iam.gserviceaccount.com",
+    "client_id": "113473980181295928895",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-dz18l%40tfg-parlamento.iam.gserviceaccount.com",
+    "universe_domain": "googleapis.com"
+  }
+  
