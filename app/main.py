@@ -1,11 +1,11 @@
 import flet as ft
-from components.flet_router import Router
+from components.fletRouter import Router
 from db.flet_pyrebase import PyrebaseWrapper
 
 def main(page: ft.Page):
     """
-    Suma dos números.
-    :return: int: La suma de a y b.
+    Programa principal. Se encarga de inicializar el Router que gestionará los cambios entre
+    las distintas vistas de la app.
     """
     
     page.window_height = 700
@@ -17,7 +17,7 @@ def main(page: ft.Page):
     myPyrebase = PyrebaseWrapper(page)
     myRouter = Router(page, myPyrebase)
 
-    page.on_route_change = myRouter.route_change
+    page.on_route_change = myRouter.routeChange
 
     page.add(
         myRouter.body

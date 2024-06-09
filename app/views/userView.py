@@ -8,10 +8,11 @@ def UserView(page, myPyrebase):
     """
         Inicial
     """
+    fileName = "propuestas.json"
     
     title = "App TFG Parlamento"
     
-    def handle_logout(*e):
+    def handleLogout(*e):
         """
         handle_logout
         """
@@ -29,9 +30,9 @@ def UserView(page, myPyrebase):
 
         page.update()
             
-    def load_table():
+    def loadTable():
         for i,x in enumerate(datos):
-            mytable.rows.append(
+            table.rows.append(
                 ft.DataRow(
                     cells = [
                         ft.DataCell(
@@ -57,14 +58,14 @@ def UserView(page, myPyrebase):
                 )
             )
     
-    def descargar_archivo(nombre_archivo):
+    def readFile():
         # Nombre del archivo que deseas descargar
-        blob = storage.bucket().blob(nombre_archivo)
-
-        # Descarga el archivo a la ubicación especificada
-        blob.download_to_filename("../assets/download/propuestas.json")
+        blob = storage.bucket().blob(fileName)
+        content = blob.download_as_text()
+        data = json.loads(content)
+        return data
     
-    def upload(datos):
+    def uploadResultsFile(datos):
         #Obtener el email del usuario que esta logeado en la app
         user = myPyrebase.auth.get_account_info(myPyrebase.idToken)
         email = user['users'][0]['email']
@@ -98,12 +99,12 @@ def UserView(page, myPyrebase):
     username = ft.TextField(label="Nombre de usuario", width=300)   
     banner = ft.Text("Votación a las propuestas", weight = "bold", color = ft.colors.WHITE, size = 32)
     
-    home_button = ft.TextButton("", icon=ft.icons.HOME_ROUNDED, icon_color=ft.colors.WHITE, on_click=lambda _:page.go('/'))
-    logout_button = ft.FilledButton(
+    homeButton = ft.TextButton("", icon=ft.icons.HOME_ROUNDED, icon_color=ft.colors.WHITE, on_click=lambda _:page.go('/'))
+    logoutButton = ft.FilledButton(
         " ",
         tooltip = "Cerrar sesión",
         icon=ft.icons.EXIT_TO_APP_ROUNDED,
-        on_click=handle_logout,
+        on_click=handleLogout,
         style=ft.ButtonStyle( 
             shape = ft.RoundedRectangleBorder(radius=0),
             bgcolor = "#043A68", 
@@ -111,7 +112,7 @@ def UserView(page, myPyrebase):
         )
     )
 
-    subir_button = ft.Container(
+    uploadButton = ft.Container(
         alignment = ft.alignment.center,
         height = 40,
         bgcolor = "#043A68",
@@ -119,25 +120,26 @@ def UserView(page, myPyrebase):
         content = ft.Text(
             "Subir votación",
             color=ft.colors.WHITE,
-            size=14,
+            size=16,
             ),
-        on_click= lambda e:upload(datos) 
+        on_click= lambda e:uploadResultsFile(datos) 
         #on_click = lambda e:print_table(datos, './imprimir.json')
     )
     
-    cabecera = ft.Container(
+    header = ft.Container(
         padding = ft.padding.all(10),
         bgcolor="#043A68",
         content = ft.Row(
-            [home_button, banner, logout_button],
+            [homeButton, banner, logoutButton],
             alignment = ft.MainAxisAlignment.SPACE_BETWEEN,
         )    
     )
      
-    mytable = ft.DataTable(
+    table = ft.DataTable(
         heading_row_color="#043A68",
         heading_row_height = 60,
         heading_text_style = ft.TextStyle(size = 16, color = "white", weight="bold"),
+        bgcolor = "#BFD7FF",
         width=page.window_width/2,
         column_spacing=220,
 		columns=[
@@ -147,18 +149,15 @@ def UserView(page, myPyrebase):
 		rows=[], 
 		)
     
-    with open('../assets/propuestas.json', 'r') as archivo:
-        # Carga el contenido del archivo JSON en una lista
-        datos = json.load(archivo)
-            
-    load_table()
-    descargar_archivo("propuestas.json")
+    datos = readFile()      
+    loadTable()
+    
     
     myPage = ft.Column( 
         controls = [
-            cabecera,
-            mytable,
-            subir_button
+            header,
+            table,
+            uploadButton
         ],
         horizontal_alignment=ft.CrossAxisAlignment.CENTER, 
         alignment=ft.MainAxisAlignment.CENTER,

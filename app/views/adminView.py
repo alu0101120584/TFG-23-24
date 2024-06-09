@@ -2,7 +2,7 @@ import flet as ft
 import json
 from firebase_admin import credentials,initialize_app,storage
 import os
-from components.you_alert import YouAlert
+from components.youAlert import YouAlert
 
 mycred = credentials.Certificate("./db/servicio.json")
 initialize_app(mycred,{'storageBucket':'tfg-parlamento.appspot.com'})
@@ -14,23 +14,23 @@ def AdminView(page, myPyrebase):
         # Carga el contenido del archivo JSON en una lista
         datos = json.load(archivo)
     
-    def validate_inputs():
-        email_value = email.value
-        password_value = password.value
+    def validateInputs():
+        emailValue = email.value
+        passwordValue = password.value
 
         # Verificar longitud de la contraseña
-        if len(password_value) < 8:
-            show_snackbar("La contraseña debe tener al menos 8 caracteres.")
+        if len(passwordValue) < 8:
+            showSnackbar("La contraseña debe tener al menos 8 caracteres.")
             return False
 
         # Verificar formato del correo electrónico
-        if "@" not in email_value or "." not in email_value:
-            show_snackbar("Por favor, introduce un correo electrónico válido.")
+        if "@" not in emailValue or "." not in emailValue:
+            showSnackbar("Por favor, introduce un correo electrónico válido.")
             return False
 
         return True
 
-    def show_snackbar(message):
+    def showSnackbar(message):
         page.snack_bar = ft.SnackBar(
             content=ft.Text(message, color=ft.colors.WHITE),
             bgcolor=ft.colors.RED,
@@ -39,28 +39,28 @@ def AdminView(page, myPyrebase):
         page.snack_bar.open = True
         page.update()
     
-    def handle_sign_up(e):
-        if validate_inputs():
+    def handleSignUp(e):
+        if validateInputs():
             try:
                 myPyrebase.register_user(name.value, username.value, email.value, password.value)
                 name.value, username.value, email.value, password.value = '', '', '', ''
                 page.go('/')
             except:
-                handle_sign_in_error()
+                handleSignInError()
 
-    def handle_sign_in_error():
-        show_snackbar("Error al registrar usuario. Por favor, inténtalo de nuevo.")
+    def handleSignInError():
+        showSnackbar("Error al registrar usuario. Por favor, inténtalo de nuevo.")
     
-    def handle_result(e):
+    def handleResult(e):
         page.go('/resultView')
         
-    def handle_logout(*e):
+    def handleLogout(*e):
         username.value = ""
         myPyrebase.kill_all_streams()
         myPyrebase.sign_out()
         page.go("/")
     
-    def load_table():
+    def loadTable():
         mytable.rows.clear()
         for x in datos:
             mytable.rows.append(
@@ -72,7 +72,7 @@ def AdminView(page, myPyrebase):
                 )
             )
     
-    async def uploadnow(e:ft.FilePickerResultEvent):
+    async def uploadFile(e:ft.FilePickerResultEvent):
         for x in e.files:
             try:
                 fileName = x.path
@@ -84,7 +84,6 @@ def AdminView(page, myPyrebase):
                 page.snack_bar = ft.SnackBar(
                     ft.Text("Fichero subido con éxito"),
                     bgcolor="green"
-
                     )
                 page.snack_bar.open = True
                 page.update()
@@ -93,7 +92,8 @@ def AdminView(page, myPyrebase):
                 print(e)
                 print("Ha ocurrido un error en la subida del fichero")
                 
-    
+    def deleteVotes():
+        pass
     
     mytable = ft.DataTable(
 		# AND ENABLE CHECKBOX FOR SELECT multiple
@@ -114,10 +114,10 @@ def AdminView(page, myPyrebase):
     email = ft.TextField(label="Email", width=300)
     password = ft.TextField(label="Contraseña", width=300, password=True, can_reveal_password=True)
     
-    home_button = ft.TextButton("", icon=ft.icons.HOME_ROUNDED, icon_color=ft.colors.WHITE, on_click=lambda _:page.go('/'))
-    logout_button = ft.FilledButton(" ", tooltip = "Cerrar sesión", icon=ft.icons.EXIT_TO_APP_ROUNDED, on_click=handle_logout, style=ft.ButtonStyle( shape = ft.RoundedRectangleBorder(radius=0),  bgcolor = "#043A68", color = ft.colors.RED))
+    homeButton = ft.TextButton("", icon=ft.icons.HOME_ROUNDED, icon_color=ft.colors.WHITE, on_click=lambda _:page.go('/'))
+    logoutButton = ft.FilledButton(" ", tooltip = "Cerrar sesión", icon=ft.icons.EXIT_TO_APP_ROUNDED, on_click=handleLogout, style=ft.ButtonStyle( shape = ft.RoundedRectangleBorder(radius=0),  bgcolor = "#043A68", color = ft.colors.RED))
     
-    register_button = ft.Container(
+    registerButton = ft.Container(
         alignment = ft.alignment.center,
         height = 40,
         bgcolor = "#043A68",
@@ -125,22 +125,22 @@ def AdminView(page, myPyrebase):
         content = ft.Text(
             "Registrar",
             color=ft.colors.WHITE,
-            size=14,
+            size=16,
             ),
-        on_click= handle_sign_up
+        on_click= handleSignUp
     )
        
-    result_button = ft.FilledButton(
+    resultButton = ft.FilledButton(
         " ", tooltip = "Mostrar resultados",
         icon = ft.icons.PREVIEW,
         style = ft.ButtonStyle( shape = ft.RoundedRectangleBorder(radius=0), bgcolor = "#043A68", color = ft.colors.WHITE),
         disabled = False,
-        on_click = handle_result
+        on_click = handleResult
     )
     
-    load_table()
+    loadTable()
     youalert = YouAlert(datos, mytable)
-    file_picker = ft.FilePicker(on_result=uploadnow)
+    file_picker = ft.FilePicker(on_result=uploadFile)
     
     myPage = ft.Column(
         width=page.window_width,
@@ -149,7 +149,7 @@ def AdminView(page, myPyrebase):
                 padding = ft.padding.all(10),
                 bgcolor="#043A68",
                 content = ft.Row(
-                    [home_button, banner, result_button, logout_button],
+                    [homeButton, banner, resultButton, logoutButton],
                     alignment = ft.MainAxisAlignment.SPACE_BETWEEN,
                 )    
             ),
@@ -158,7 +158,6 @@ def AdminView(page, myPyrebase):
                     ft.Container(
                         expand = 3,
                         content = ft.Column(
-                            #alignment = ft.MainAxisAlignment.START,
                             horizontal_alignment = ft.CrossAxisAlignment.CENTER,
                             spacing = 40,
                             controls = [
@@ -176,7 +175,21 @@ def AdminView(page, myPyrebase):
                                     width=300,
                                     on_click=lambda e:file_picker.pick_files()
                                 ),
-                                youalert
+                                youalert,
+                                ft.Text(
+                                    "Eliminar los votos de los usuarios en Firebase",
+                                    size = 16,
+                                    color = "#043A68",
+                                    weight= ft.FontWeight.BOLD
+                                ),
+                                ft.FilledButton(
+                                    "Eliminar",
+                                    style=ft.ButtonStyle( shape = ft.RoundedRectangleBorder(radius=0), bgcolor = "#043A68", color = "white",),
+                                    icon=ft.icons.UPLOAD_FILE,
+                                    height=40,
+                                    width=300,
+                                    on_click=lambda e:deleteVotes
+                                )
                             ]
                         )
                     ),
@@ -202,7 +215,7 @@ def AdminView(page, myPyrebase):
                                 alignment=ft.MainAxisAlignment.CENTER
                                     ),
                                 ft.Row(
-                                    [register_button],
+                                    [registerButton],
                                 alignment=ft.MainAxisAlignment.CENTER),
                             ]
                         )
