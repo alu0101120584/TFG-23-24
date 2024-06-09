@@ -62,10 +62,7 @@ def ResultsView(page, myPyrebase):
                     resultsUserList.append([user.email, datos_entrada])
                 except Exception as e:
                     print(f"No se pudo leer el archivo '{fileName}': {e}")
-            else:
-                print(f"El archivo '{fileName}' no existe en Google Cloud Storage.")
-    
-                                    
+                                   
     cards = []
     userList = getAllUsers()
     resultsUserList = []

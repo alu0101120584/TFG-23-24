@@ -42,15 +42,6 @@ def IndexView(page, myPyrebase=None):
             ),
         on_click= handleSignIn
     )
-    
-    olvidar_button = ft.Container(
-        alignment = ft.alignment.center,
-        content=ft.Text(
-            "¿Ha olvidado su contraseña o su cuenta está bloqueada?",
-            color="#043A68",
-        ),
-        on_click=handleAdmin
-    )
    
     myPage = ft.Row(
         controls = [
@@ -76,9 +67,6 @@ def IndexView(page, myPyrebase=None):
                             ),
                         ft.Row(
                             [logInButton],
-                            alignment=ft.MainAxisAlignment.CENTER),
-                        ft.Row(
-                            [olvidar_button], 
                             alignment=ft.MainAxisAlignment.CENTER),
                     ],
                     spacing = 40,

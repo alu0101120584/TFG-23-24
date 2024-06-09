@@ -1,6 +1,6 @@
 import flet as ft
 import json
-from firebase_admin import credentials,initialize_app,storage
+from firebase_admin import auth,credentials,initialize_app,storage
 import os
 from components.youAlert import YouAlert
 
@@ -9,10 +9,14 @@ initialize_app(mycred,{'storageBucket':'tfg-parlamento.appspot.com'})
 
 def AdminView(page, myPyrebase):
     title = "App TFG Parlamento"
+    fileName = "propuestas.json"
     
-    with open('../assets/propuestas.json', 'r') as archivo:
-        # Carga el contenido del archivo JSON en una lista
-        datos = json.load(archivo)
+    def readFile():
+        # Nombre del archivo que deseas descargar
+        blob = storage.bucket().blob(fileName)
+        content = blob.download_as_text()
+        data = json.loads(content)
+        return data
     
     def validateInputs():
         emailValue = email.value
@@ -60,6 +64,8 @@ def AdminView(page, myPyrebase):
         myPyrebase.sign_out()
         page.go("/")
     
+    datos = readFile()
+    
     def loadTable():
         mytable.rows.clear()
         for x in datos:
@@ -71,7 +77,24 @@ def AdminView(page, myPyrebase):
                     ]
                 )
             )
-    
+            
+    def deleteFiles(e):
+        for user in userList:
+            fileName = f'{user.email}resultados.json'
+            blob = storage.bucket().blob(fileName)
+
+            if blob.exists():
+                try:
+                    blob.delete()
+                    print(f"El archivo '{fileName}' ha sido eliminado.")
+                except Exception as e:
+                    print(f"No se pudo eliminar el archivo '{fileName}': {e}")
+            else:
+                print(f"El archivo '{fileName}' no existe en Google Cloud Storage.")
+        dlg_modal.open = False
+        page.update()
+        
+                
     async def uploadFile(e:ft.FilePickerResultEvent):
         for x in e.files:
             try:
@@ -91,9 +114,6 @@ def AdminView(page, myPyrebase):
             except Exception as e:
                 print(e)
                 print("Ha ocurrido un error en la subida del fichero")
-                
-    def deleteVotes():
-        pass
     
     mytable = ft.DataTable(
 		# AND ENABLE CHECKBOX FOR SELECT multiple
@@ -108,6 +128,46 @@ def AdminView(page, myPyrebase):
         width=page.window_width
 		)
     
+    def close_dlg(e):
+        dlg_modal.open = False
+        page.update()
+        
+    dlg_modal = ft.AlertDialog(
+        modal=True,
+        content=ft.Text("¿Seguro que quieres eliminar las votaciones?"),
+        actions=[
+            ft.TextButton("Sí", on_click=deleteFiles),
+            ft.TextButton("No", on_click=close_dlg),
+        ],
+        actions_alignment=ft.MainAxisAlignment.END,
+    )
+    
+    def open_dlg_modal(e):
+        page.dialog = dlg_modal
+        dlg_modal.open = True
+        page.update()
+    
+    def getAllUsers():
+        usuarios = []
+        # Obtiene los usuarios de la primera página
+        pagina = auth.list_users()
+        # Agrega los usuarios de la primera página a la lista
+        for usuario in pagina.users:
+            usuarios.append(usuario)
+        # Itera sobre las páginas restantes y agrega los usuarios a la lista
+        while pagina.has_next_page:
+            pagina = pagina.get_next_page()
+            for usuario in pagina.users:
+                usuarios.append(usuario)
+        #Se elimina el usuario admin de la lista de usuarios        
+        for usuario in usuarios:
+            email = usuario.email
+            email_str = str(email)
+            if email_str == 'admin@gmail.com':
+                usuarios.remove(usuario)
+        return usuarios
+    
+    userList = getAllUsers()
     banner = ft.Text("Panel de control de administrador", weight = "bold", color = ft.colors.WHITE, size = 32)
     name = ft.TextField(label="Nombre", width=300)
     username = ft.TextField(label="Nombre de usuario", width=300)
@@ -138,7 +198,9 @@ def AdminView(page, myPyrebase):
         on_click = handleResult
     )
     
+    readFile()
     loadTable()
+    
     youalert = YouAlert(datos, mytable)
     file_picker = ft.FilePicker(on_result=uploadFile)
     
@@ -188,7 +250,7 @@ def AdminView(page, myPyrebase):
                                     icon=ft.icons.UPLOAD_FILE,
                                     height=40,
                                     width=300,
-                                    on_click=lambda e:deleteVotes
+                                    on_click=open_dlg_modal
                                 )
                             ]
                         )
