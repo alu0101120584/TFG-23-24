@@ -247,7 +247,7 @@ def AdminView(page, myPyrebase):
                                 ft.FilledButton(
                                     "Eliminar",
                                     style=ft.ButtonStyle( shape = ft.RoundedRectangleBorder(radius=0), bgcolor = "#043A68", color = "white",),
-                                    icon=ft.icons.UPLOAD_FILE,
+                                    icon=ft.icons.DELETE_OUTLINE_SHARP,
                                     height=40,
                                     width=300,
                                     on_click=open_dlg_modal
