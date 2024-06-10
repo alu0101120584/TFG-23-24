@@ -9,7 +9,7 @@ __pycache__/
 #Downloaded files from firebase
 assets/download/
 assets/upload/
-assets/propuestas.json
+#assets/propuestas.json
 
 # C extensions
 *.so
