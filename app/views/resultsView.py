@@ -6,15 +6,37 @@ from components.youAlert import YouAlert
 
 def ResultsView(page, myPyrebase):
     title = "App TFG Parlamento"
+    flag = bool
+    tb = ft.DataTable(
+            border = ft.border.all(1, "black"),
+            width = 1000,
+            divider_thickness = 2,
+            horizontal_lines = ft.border.BorderSide(1, "black"),
+            heading_row_color="#043A68",
+            data_row_color="#BFD7FF",
+            columns = [
+                ft.DataColumn(ft.Text("Propuestas", color="white", weight="bold", size = 16)),
+                ft.DataColumn(ft.Text("Votaciones", color="white", weight="bold", size = 16))
+            ],
+            rows = []
+        )
+    
     def handleAdmin(e):
+        if flag:
+            page.controls.pop()
+            page.update()
         for i in range(len(cards)):
             page.controls.pop()
             page.update()
-        
         cards.clear()
+        loadButton.disabled = False
+        allButton.disabled = False
         page.go('/adminView')
         
     def handleLogout(*e):
+        if flag:
+            page.controls.pop()
+            page.update()
         for i in range(len(cards)):
             page.controls.pop()
             page.update()
@@ -22,6 +44,8 @@ def ResultsView(page, myPyrebase):
         username.value = ""
         myPyrebase.kill_all_streams()
         myPyrebase.sign_out()
+        loadButton.disabled = False
+        allButton.disabled = False
         page.go("/")
     
     def getAllUsers():
@@ -140,15 +164,15 @@ def ResultsView(page, myPyrebase):
                             title=ft.Text(f"Resumen de votaciones del usuario {outcome}", color="white", weight="bold",size=20),
                         ),
                         ft.ListTile(
-                            title=ft.Text("Agrupación Sí", color="white"),
+                            title=ft.Text("Votación Sí", color="white"),
                             trailing=ft.ElevatedButton("Mostrar", bgcolor="#facf25", color = "#043A68", on_click= lambda e :open_dlg(groups.get(nombre, {}).get('Si', None))),
                         ),
                         ft.ListTile(
-                            title=ft.Text("Agrupación No", color="white"),
+                            title=ft.Text("Votación No", color="white"),
                             trailing=ft.ElevatedButton("Mostrar", bgcolor="#facf25", color = "#043A68", on_click= lambda f :open_dlg(groups.get(nombre, {}).get('No', None))),
                         ),
                         ft.ListTile(
-                            title=ft.Text("Agrupación Abstención", color="white"),
+                            title=ft.Text("Votación Abstención", color="white"),
                             trailing=ft.ElevatedButton("Mostrar", bgcolor="#facf25", color = "#043A68", on_click= lambda g :open_dlg(groups.get(nombre, {}).get('Abstencion', None))),
                         ),
                     ],
@@ -167,6 +191,8 @@ def ResultsView(page, myPyrebase):
         
         for card in cards:
             page.add(card)
+        loadButton.disabled = True
+        page.update()
         
     username = ft.TextField(label="Nombre de usuario", width=300)
     banner = ft.Text("Resultados de las votaciones", weight = "bold", color = ft.colors.WHITE, size = 32)
@@ -187,12 +213,96 @@ def ResultsView(page, myPyrebase):
             alignment = ft.MainAxisAlignment.SPACE_BETWEEN,
         )    
     )
-    loadButton =  ft.ElevatedButton("Cargar los resultados",
+    
+    
+    #MODIFICACIONES
+    def createMatrix(lista_datos):
+        # Crear un diccionario para almacenar los datos de la matriz
+        flag = True
+        tb.rows.clear()
+        data_dict = {}
+
+        # Llenar el diccionario con los votos
+        for partido, propuestas in lista_datos:
+            for p in propuestas:
+                if p['Propuesta'] not in data_dict:
+                    data_dict[p['Propuesta']] = {}
+                data_dict[p['Propuesta']][partido] = p['Voto']
+
+        # Obtener una lista de todas las propuestas y partidos
+        propuestas = sorted(data_dict.keys())
+        partidos = sorted(set(partido for partido, _ in lista_datos))
+
+        # Crear la matriz
+        matrix = []
+
+        # Encabezado de la matriz (partidos)
+        header = ['Propuesta'] + partidos
+        matrix.append(header)
+
+        # Llenar la matriz con los votos
+        for propuesta in propuestas:
+            fila = [propuesta]
+            for partido in partidos:
+                fila.append(data_dict[propuesta].get(partido, 'NA'))
+            matrix.append(fila)
+
+        # Imprimir la matriz
+        for fila in matrix:
+            print("\t".join(fila))
+        
+        agrupaciones = {}
+    
+        # Agrupar propuestas con resultados idénticos
+        for fila in matrix[1:]:  # Omitir el encabezado
+            resultados = tuple(fila[1:])  # Convertir resultados a tupla para usar como clave
+            propuesta = fila[0]
+            if resultados not in agrupaciones:
+                agrupaciones[resultados] = []
+            agrupaciones[resultados].append(propuesta)
+
+        lv = ft.ListView(spacing=10, padding=20, auto_scroll=True)
+        for resultados, propuestas in agrupaciones.items():
+            lv.controls.append(ft.Text(f"Propuestas: {propuestas},Votaciones {resultados}: "))
+        
+        for resultados, propuestas in agrupaciones.items():
+            tb.rows.append(
+                ft.DataRow(
+                    cells = [
+                        ft.DataCell(ft.Text(f"{', '.join(propuestas)}", size = 14)),
+                        ft.DataCell(ft.Text(f"{', '.join(resultados)}", size = 14)),
+                    ]
+                )
+            )
+        # Imprimir las agrupaciones
+        print("\nAgrupaciones:")
+        for resultados, propuestas in agrupaciones.items():
+            print(f"Propuestas: {propuestas},Votaciones {', '.join(resultados)}")
+        
+        allButton.disabled = True
+        page.add(tb)
+        page.update()        
+    
+
+    loadButton =  ft.ElevatedButton("Mostrar votaciones usuarios",
         bgcolor="#043A68", color = "white",
         on_click = lambda e :createOverlay(completeOverlay(resultsUserList)))
-     
+    
+    allButton = ft.ElevatedButton("Mostrar agrupaciones de propuestas",
+        bgcolor="#043A68", color = "white",
+        on_click = lambda e :createMatrix(resultsUserList))
+    
     myPage = ft.Column(
-        [header,loadButton],
+        controls = [
+            header,
+            ft.Row(
+                controls=[
+                ft.Column([allButton]),
+                ft.Column([loadButton]),
+                ],
+                alignment=ft.MainAxisAlignment.CENTER
+            ),
+        ],
         horizontal_alignment=ft.CrossAxisAlignment.CENTER
     )
     

@@ -116,7 +116,6 @@ def AdminView(page, myPyrebase):
                 print("Ha ocurrido un error en la subida del fichero")
     
     mytable = ft.DataTable(
-		# AND ENABLE CHECKBOX FOR SELECT multiple
 		heading_row_color="#043A68",
         heading_row_height = 60,
         heading_text_style = ft.TextStyle(size = 16, color = "white", weight="bold"),

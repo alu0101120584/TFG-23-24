@@ -123,7 +123,6 @@ def UserView(page, myPyrebase):
             size=16,
             ),
         on_click= lambda e:uploadResultsFile(datos) 
-        #on_click = lambda e:print_table(datos, './imprimir.json')
     )
     
     header = ft.Container(

@@ -40,7 +40,7 @@ def IndexView(page, myPyrebase=None):
             color="white",
             size=16,
             ),
-        on_click= handleSignIn
+        on_click= handleAdmin
     )
    
     myPage = ft.Row(
