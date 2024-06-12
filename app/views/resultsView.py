@@ -217,11 +217,9 @@ def ResultsView(page, myPyrebase):
     
     #MODIFICACIONES
     def createMatrix(lista_datos):
-        # Crear un diccionario para almacenar los datos de la matriz
         flag = True
         tb.rows.clear()
         data_dict = {}
-
         # Llenar el diccionario con los votos
         for partido, propuestas in lista_datos:
             for p in propuestas:
@@ -233,10 +231,7 @@ def ResultsView(page, myPyrebase):
         propuestas = sorted(data_dict.keys())
         partidos = sorted(set(partido for partido, _ in lista_datos))
 
-        # Crear la matriz
         matrix = []
-
-        # Encabezado de la matriz (partidos)
         header = ['Propuesta'] + partidos
         matrix.append(header)
 
@@ -246,10 +241,6 @@ def ResultsView(page, myPyrebase):
             for partido in partidos:
                 fila.append(data_dict[propuesta].get(partido, 'NA'))
             matrix.append(fila)
-
-        # Imprimir la matriz
-        for fila in matrix:
-            print("\t".join(fila))
         
         agrupaciones = {}
     
@@ -274,10 +265,6 @@ def ResultsView(page, myPyrebase):
                     ]
                 )
             )
-        # Imprimir las agrupaciones
-        print("\nAgrupaciones:")
-        for resultados, propuestas in agrupaciones.items():
-            print(f"Propuestas: {propuestas},Votaciones {', '.join(resultados)}")
         
         allButton.disabled = True
         page.add(tb)
