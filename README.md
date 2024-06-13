@@ -19,6 +19,6 @@ Para la instalación de esta aplicación seguir los siguientes pasos:
 
 Una vez se haya instalado y se haya creado el entrono virtual simplemente introducir el siguiente comando para lanzar la aplicación
    
-   cd app
+   `cd app`
    
-   flet main.py
+   `flet main.py`
