@@ -15,7 +15,7 @@ def ResultsView(page, myPyrebase):
             heading_row_color="#043A68",
             data_row_color="#BFD7FF",
             columns = [
-                ft.DataColumn(ft.Text("Propuestas", color="white", weight="bold", size = 16)),
+                ft.DataColumn(ft.Text("Agrupaciones", color="white", weight="bold", size = 16)),
                 ft.DataColumn(ft.Text("Votaciones", color="white", weight="bold", size = 16))
             ],
             rows = []
@@ -251,10 +251,6 @@ def ResultsView(page, myPyrebase):
             if resultados not in agrupaciones:
                 agrupaciones[resultados] = []
             agrupaciones[resultados].append(propuesta)
-
-        lv = ft.ListView(spacing=10, padding=20, auto_scroll=True)
-        for resultados, propuestas in agrupaciones.items():
-            lv.controls.append(ft.Text(f"Propuestas: {propuestas},Votaciones {resultados}: "))
         
         for resultados, propuestas in agrupaciones.items():
             tb.rows.append(
