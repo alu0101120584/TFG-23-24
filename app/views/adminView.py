@@ -8,6 +8,9 @@ mycred = credentials.Certificate("./db/servicio.json")
 initialize_app(mycred,{'storageBucket':'tfg-parlamento.appspot.com'})
 
 def AdminView(page, myPyrebase):
+    """
+        Vista del administrador.
+    """
     title = "App TFG Parlamento"
     fileName = "propuestas.json"
     

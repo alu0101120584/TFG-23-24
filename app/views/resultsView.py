@@ -5,6 +5,9 @@ import io
 from components.youAlert import YouAlert
 
 def ResultsView(page, myPyrebase):
+    """
+        Vista de resultados de la aplicación.
+    """
     title = "App TFG Parlamento"
     flag = bool
     tb = ft.DataTable(

@@ -1,6 +1,9 @@
 import flet as ft
 
 def IndexView(page, myPyrebase=None):
+    """
+        Vista de inicio de la aplicación.
+    """
     title = "App TFG Parlamento"
 
     def handleSignInError():

@@ -1,7 +1,7 @@
 site_name: My Project Documentation
 nav:
   - Inicio: index.md
-  - A cerca: about.md
+  - Instalación: about.md
   - Views:
     - Vista de inicio: index_view.md
     - Vista de administrador: admin_view.md

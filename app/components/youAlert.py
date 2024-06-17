@@ -2,6 +2,9 @@ import flet as ft
 
 class YouAlert(ft.UserControl):
     def __init__(self,mydata,mytable):
+        """
+        Componente personalizado de AlertDialog
+        """
         super().__init__()
         self.mydata = mydata
         self.mytable = mytable

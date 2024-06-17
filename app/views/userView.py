@@ -6,7 +6,7 @@ from db.flet_pyrebase import PyrebaseWrapper
 
 def UserView(page, myPyrebase):
     """
-        Inicial
+        Vista del usuario.
     """
     fileName = "propuestas.json"
     
